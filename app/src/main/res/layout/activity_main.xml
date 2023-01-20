@@ -17,7 +17,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <include layout="@layout/nav_bottom_player"/>
+    <include
+        android:id="@+id/nav_bottom_player"
+        layout="@layout/nav_bottom_player"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_bottom_menu"

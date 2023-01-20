@@ -3,6 +3,8 @@ package nataliia.semenova.musicplayeryoutubeapi.ui.fragment;
 import static android.content.Context.TELEPHONY_SERVICE;
 
 import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,13 +23,13 @@ import java.util.List;
 import nataliia.semenova.musicplayeryoutubeapi.R;
 import nataliia.semenova.musicplayeryoutubeapi.data.PermissionHelper;
 import nataliia.semenova.musicplayeryoutubeapi.data.SongHelper;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.ISongList;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
 import nataliia.semenova.musicplayeryoutubeapi.ui.MusicPlayerActivity;
 import nataliia.semenova.musicplayeryoutubeapi.ui.adapter.SongListAdapter;
 
 public class DeviceFragment extends Fragment {
     private static final int STORAGE_PERMISSION_CODE = 101;
-    private static final int PHONE_PERMISSION_CODE = 100;
 
     private static List<Song> songs;
 
@@ -45,8 +47,15 @@ public class DeviceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        context = (MusicPlayerActivity) inflater.getContext();
         return inflater.inflate(R.layout.fragment_device, container, false);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            this.context = (MusicPlayerActivity) context;
+        }
     }
 
     @Override
@@ -61,21 +70,15 @@ public class DeviceFragment extends Fragment {
         )) {
             setSongList(view.findViewById(R.id.rv_song_list));
         }
-/*        PermissionHelper.checkPermission(Manifest.permission.READ_PHONE_STATE,
-                PHONE_PERMISSION_CODE,  (MusicPlayerActivity) getActivity());
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        telephonyManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);*/
     }
 
     private void setSongList(RecyclerView rvSongs) {
         songs = SongHelper.getSongList(context);
-        SongListAdapter songAdapter = new SongListAdapter(context, songs, new SongListAdapter.Callback() {
-            @Override
-            public void onSongClick(int position) {
-                /*songService.beginSong(position);*/
-            }
+        SongListAdapter songAdapter = new SongListAdapter(context, songs, position -> {
+            try {
+                ((ISongList)context).fragmentSongList(songs, position);
+            } catch (ClassCastException ignored) {}
         });
-
         rvSongs.setAdapter(songAdapter);
     }
 }
