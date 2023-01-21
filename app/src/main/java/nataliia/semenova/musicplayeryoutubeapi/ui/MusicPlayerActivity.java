@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.ComponentName;
@@ -13,19 +12,16 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import java.util.List;
 
 import nataliia.semenova.musicplayeryoutubeapi.data.PermissionHelper;
-import nataliia.semenova.musicplayeryoutubeapi.data.SongHelper;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.ISongList;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
 import nataliia.semenova.musicplayeryoutubeapi.service.SongService;
-import nataliia.semenova.musicplayeryoutubeapi.ui.adapter.SongListAdapter;
 import nataliia.semenova.musicplayeryoutubeapi.ui.fragment.DeviceFragment;
 import nataliia.semenova.musicplayeryoutubeapi.R;
 import nataliia.semenova.musicplayeryoutubeapi.ui.fragment.YoutubeFragment;
@@ -109,6 +105,10 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     public void fragmentSongList(List<Song> songs, int position) {
         this.songs = songs;
         binding.navBottomPlayer.getRoot().setVisibility(View.VISIBLE);
+        binding.navBottomPlayer.tvSongTitleMp.setMovementMethod(new ScrollingMovementMethod());
+        binding.navBottomPlayer.tvSongTitleMp.setHorizontallyScrolling(true);
+        binding.navBottomPlayer.tvSongArtistMp.setMovementMethod(new ScrollingMovementMethod());
+        binding.navBottomPlayer.tvSongArtistMp.setHorizontallyScrolling(true);
         songService.setMusic(songs);
         songService.beginSong(position);
     }
@@ -190,7 +190,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
             binding.navBottomPlayer.tvSongTitleMp
                     .setText(songs.get(position).getTitle());
             binding.navBottomPlayer.tvSongArtistMp
-                    .setText(songs.get(position).getPerformer());
+                    .setText(songs.get(position).getArtist());
             onPlaySong();
         }
 

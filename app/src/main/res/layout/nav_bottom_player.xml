@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_bottom_player"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="80dp"
     android:orientation="vertical"
     android:background="@color/dark_music_player"
     app:layout_constraintBottom_toTopOf="@+id/nav_bottom_menu">
@@ -13,12 +13,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="-1dp"
         android:max="100"
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
         android:progressTint="@color/white"
-        android:thumb="@drawable/seekbar_thumb" />
+        android:thumb="@drawable/seekbar_thumb"/>
 
     <ImageView
         android:id="@+id/iv_song_cover_mp"
@@ -33,22 +32,26 @@
         android:layout_height="wrap_content"
         android:textColor="@color/song_title_mini_player"
         android:textSize="22sp"
+        android:maxLines="1"
         android:layout_marginStart="10dp"
         android:text="@string/unknown"
         android:layout_below="@id/sb_song_mp"
-        android:layout_toEndOf="@id/iv_song_cover_mp"/>
+        android:layout_toEndOf="@id/iv_song_cover_mp"
+        android:layout_toStartOf="@id/linear_panel_control"/>
     <TextView
         android:id="@+id/tv_song_artist_mp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/song_artist_mini_player"
         android:textSize="11sp"
+        android:maxLines="1"
         android:layout_marginStart="10dp"
         android:text="@string/unknown"
         android:layout_below="@id/tv_song_title_mp"
         android:layout_toEndOf="@id/iv_song_cover_mp"/>
 
     <LinearLayout
+        android:id="@+id/linear_panel_control"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal"

@@ -6,13 +6,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/dark_music_player"
     tools:context=".ui.fragment.DeviceFragment">
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_song_list"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_song_list" />
+        android:layout_height="match_parent">
+        <EditText
+            android:id="@+id/sv_device_songs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="25dp"
+            android:maxLines="1"
+            android:textSize="21sp"
+            android:paddingVertical="5dp"
+            android:paddingHorizontal="10dp"
+            android:background="@drawable/sv_style"
+            android:layout_alignParentTop="true" />
 
+        <ImageButton
+            android:id="@+id/btn_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search"
+            android:layout_margin="10dp"
+            android:background="@color/dark_music_player"
+            android:scaleType="centerInside"
+            android:layout_alignTop="@id/sv_device_songs"
+            android:layout_alignBottom="@id/sv_device_songs"
+            android:layout_alignEnd="@id/sv_device_songs"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_song_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_song_list"
+            android:layout_below="@id/sv_device_songs"/>
+    </RelativeLayout>
 </FrameLayout>

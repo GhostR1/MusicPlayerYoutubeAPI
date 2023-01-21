@@ -4,11 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -37,7 +39,12 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
     public void onBindViewHolder(SongListAdapter.ViewHolder holder, int position) {
         Song song = songs.get(position);
         holder.tvTitle.setText(song.getTitle());
-        holder.tvArtist.setText(song.getPerformer());
+        holder.tvArtist.setText(song.getArtist());
+        Glide.with(inflater.getContext())
+                .load(songs.get(position)
+                .getCoverUri())
+                .apply(RequestOptions.placeholderOf(R.drawable.song_cover).centerInside())
+                .into(holder.ivCover);
 
         holder.itemView.setOnClickListener(v -> {
             if (callback != null) {
@@ -54,11 +61,13 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
     public static class ViewHolder extends RecyclerView.ViewHolder {
         final TextView tvTitle;
         final TextView tvArtist;
+        final ImageView ivCover;
 
         ViewHolder(View view) {
             super(view);
             tvTitle = view.findViewById(R.id.tv_song_title);
             tvArtist = view.findViewById(R.id.tv_song_artist);
+            ivCover = view.findViewById(R.id.iv_song_cover);
         }
     }
 
