@@ -17,7 +17,13 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField "String", "API_YOUTUBE_URL", "\"https://www.googleapis.com/youtube/v3/\""
+            buildConfigField "String", "YOTUBE_DATA_TOKEN", "\"AIzaSyBfHhqRqWmO5ziLfvApg2FM8ScCpQwSiCM\""
+        }
         release {
+            buildConfigField "String", "API_YOUTUBE_URL", "\"https://www.googleapis.com/youtube/v3/\""
+            buildConfigField "String", "YOTUBE_DATA_TOKEN", "\"AIzaSyBfHhqRqWmO5ziLfvApg2FM8ScCpQwSiCM\""
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -33,7 +39,6 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -47,4 +52,8 @@ dependencies {
 
     // Library for media session
     implementation 'androidx.media:media:1.6.0'
+
+    // Retrofit2 for API connection
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 }

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nataliia.semenova.musicplayeryoutubeapi.R;
-import nataliia.semenova.musicplayeryoutubeapi.data.PermissionHelper;
+import nataliia.semenova.musicplayeryoutubeapi.utils.PermissionHelper;
 import nataliia.semenova.musicplayeryoutubeapi.data.SongHelper;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.ISongList;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
@@ -33,8 +33,8 @@ public class DeviceFragment extends Fragment implements TextWatcher {
 
     private static List<Song> songs;
 
-    MusicPlayerActivity context;
-    RecyclerView rvSongs;
+    private MusicPlayerActivity context;
+    private RecyclerView rvSongs;
 
     public DeviceFragment() {
         // Required empty public constructor

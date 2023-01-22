@@ -1,4 +1,4 @@
-package nataliia.semenova.musicplayeryoutubeapi.data;
+package nataliia.semenova.musicplayeryoutubeapi.utils;
 
 import android.content.pm.PackageManager;
 

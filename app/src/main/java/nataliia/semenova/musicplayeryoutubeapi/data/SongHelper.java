@@ -4,25 +4,14 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Build;
 import android.provider.MediaStore;
 
-import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import nataliia.semenova.musicplayeryoutubeapi.R;
+
 import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
 
 public class SongHelper {

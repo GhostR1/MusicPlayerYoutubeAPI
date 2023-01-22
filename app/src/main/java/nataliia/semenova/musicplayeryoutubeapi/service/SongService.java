@@ -25,12 +25,14 @@ public class SongService extends Service {
     private static final int PROGRESS_UPDATE_DELAY = 10;
 
     private MediaPlayer mediaPlayer;
-    private List<Song> songs = new ArrayList<>();
-    private MediaPlayerListener mediaPlayerListener = new MediaPlayerListener();
+    private final MediaPlayerListener mediaPlayerListener = new MediaPlayerListener();
+
     private final IBinder musicBinder = new SongBinder();
     private ICallback callback;
-    private Handler handlerProgress = new Handler();
-    private UpdateProgressTask updateProgressTask = new UpdateProgressTask();
+    private final Handler handlerProgress = new Handler();
+    private final UpdateProgressTask updateProgressTask = new UpdateProgressTask();
+
+    private List<Song> songs = new ArrayList<>();
     private int currentPosition = -1;
 
     public static void start(Context context, ServiceConnection serviceConnection) {

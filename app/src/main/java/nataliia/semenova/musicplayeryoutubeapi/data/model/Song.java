@@ -1,6 +1,5 @@
 package nataliia.semenova.musicplayeryoutubeapi.data.model;
 
-import android.graphics.Bitmap;
 import android.net.Uri;
 
 public class Song {

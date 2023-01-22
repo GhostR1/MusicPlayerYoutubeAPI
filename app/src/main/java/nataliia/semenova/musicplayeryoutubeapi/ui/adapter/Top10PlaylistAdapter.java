@@ -16,15 +16,15 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import nataliia.semenova.musicplayeryoutubeapi.R;
-import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.youtube.YoutubeVideo;
 
-public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHolder> {
+public class Top10PlaylistAdapter extends RecyclerView.Adapter<Top10PlaylistAdapter.ViewHolder> {
     private final LayoutInflater inflater;
-    public List<Song> songs;
+    public List<YoutubeVideo> songs;
 
     private final Callback callback;
 
-    public SongListAdapter(Context context, List<Song> songs, Callback callback) {
+    public Top10PlaylistAdapter(Context context, List<YoutubeVideo> songs, Callback callback) {
         this.songs = songs;
         this.inflater = LayoutInflater.from(context);
         this.callback = callback;
@@ -32,18 +32,20 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
 
     @NonNull
     @Override
-    public SongListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.item_song_list, parent, false);
+    public Top10PlaylistAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.item_top_10_playlist, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(SongListAdapter.ViewHolder holder, int position) {
-        Song song = songs.get(position);
-        holder.tvTitle.setText(song.getTitle());
-        holder.tvArtist.setText(song.getArtist());
+    public void onBindViewHolder(Top10PlaylistAdapter.ViewHolder holder, int position) {
+        YoutubeVideo youtubeVideo = songs.get(position);
+
+        holder.tvTitle.setText(youtubeVideo.getSnippet().getTitle());
+        holder.tvArtist.setText(youtubeVideo.getSnippet().getChannelTitle());
+
         Glide.with(inflater.getContext())
-                .load(song.getCoverUri())
+                .load(youtubeVideo.getSnippet().getThumbnails().getMedium().getUrl())
                 .apply(RequestOptions.placeholderOf(R.drawable.song_cover).centerInside())
                 .into(holder.ivCover);
 
@@ -66,9 +68,9 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
 
         ViewHolder(View view) {
             super(view);
-            tvTitle = view.findViewById(R.id.tv_song_title);
-            tvArtist = view.findViewById(R.id.tv_song_artist);
-            ivCover = view.findViewById(R.id.iv_song_cover);
+            tvTitle = view.findViewById(R.id.tv_song_title_top_10);
+            tvArtist = view.findViewById(R.id.tv_song_artist_top_10);
+            ivCover = view.findViewById(R.id.iv_song_cover_top_10);
         }
     }
 
@@ -81,4 +83,3 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
         void onSongClick(int position);
     }
 }
-

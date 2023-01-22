@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -17,15 +16,15 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.SeekBar;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
-import nataliia.semenova.musicplayeryoutubeapi.data.PermissionHelper;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.ISongList;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
 import nataliia.semenova.musicplayeryoutubeapi.service.NotificationServiceConnection;
@@ -55,15 +54,29 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         setContentView(binding.getRoot());
         replaceFragment(new YoutubeFragment());
 
-        binding.navBottomMenu.setOnItemSelectedListener(item -> {
-        switch (item.getItemId()) {
-            case (R.id.music):
-                replaceFragment(new YoutubeFragment());
-                break;
-            case (R.id.files):
-                replaceFragment(new DeviceFragment());
-                break;
+        bindNavBottomActions();
+
+        if(songs == null) {
+            binding.navBottomPlayer.getRoot().setVisibility(View.GONE);
         }
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(binding.frameLayout.getId(), fragment).commit();
+    }
+
+    private void bindNavBottomActions() {
+        binding.navBottomMenu.setOnItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case (R.id.music):
+                    replaceFragment(new YoutubeFragment());
+                    break;
+                case (R.id.files):
+                    replaceFragment(new DeviceFragment());
+                    break;
+            }
             return true;
         });
 
@@ -92,17 +105,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         binding.navBottomPlayer.btnPreviousMp.setOnClickListener(this);
         binding.navBottomPlayer.btnPlayMp.setOnClickListener(this);
         binding.navBottomPlayer.btnNextMp.setOnClickListener(this);
-
-
-        if(songs == null) {
-            binding.navBottomPlayer.getRoot().setVisibility(View.GONE);
-        }
-    }
-
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(binding.frameLayout.getId(), fragment).commit();
     }
 
     @Override
@@ -115,7 +117,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         binding.navBottomPlayer.tvSongArtistMp.setHorizontallyScrolling(true);
         songService.setMusic(songs);
         songService.beginSong(position);
-        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position));
+        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position), true);
     }
 
     @Override
@@ -142,25 +144,44 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()) {
             case (R.id.btn_previous_mp):
-                int position;
-                position = songService.getCurrentPosition() - 1;
-                if (position < 0) {
-                    position = songs.size() - 1;
-                }
-                CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position));
-                songService.beginSong(position);
+                playPrevious();
                 break;
             case (R.id.btn_play_mp):
-                if (songService.isPlaying()) {
-                    songService.pauseSong();
-                } else {
-                    songService.playSong();
-                }
+                pausePlay();
                 break;
             case (R.id.btn_next_mp):
                 playNext();
                 break;
         }
+    }
+
+    private void pausePlay() {
+        if (songService.isPlaying()) {
+            songService.pauseSong();
+            CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(songService.getCurrentPosition()), false);
+        } else {
+            songService.playSong();
+            CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(songService.getCurrentPosition()), true);
+        }
+    }
+
+    private void playPrevious() {
+        int position;
+        position = songService.getCurrentPosition() - 1;
+        if (position < 0) {
+            position = songs.size() - 1;
+        }
+        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position), true);
+        songService.beginSong(position);
+    }
+
+    private void playNext() {
+        int position = songService.getCurrentPosition() + 1;
+        if (position >= songs.size()) {
+            position = 0;
+        }
+        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position), true);
+        songService.beginSong(position);
     }
 
     private final ServiceConnection songConnection = new ServiceConnection() {
@@ -187,15 +208,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         }
     };
 
-    private void playNext() {
-        int position = songService.getCurrentPosition() + 1;
-        if (position >= songs.size()) {
-            position = 0;
-        }
-        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position));
-        songService.beginSong(position);
-    }
-
     class PlayerCallback implements SongService.ICallback {
 
         @Override
@@ -204,6 +216,10 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                     .setText(songs.get(position).getTitle());
             binding.navBottomPlayer.tvSongArtistMp
                     .setText(songs.get(position).getArtist());
+            Glide.with(MusicPlayerActivity.this)
+                    .load(songs.get(position).getCoverUri())
+                    .apply(RequestOptions.placeholderOf(R.drawable.song_cover))
+                    .into(binding.navBottomPlayer.ivSongCoverMp);
             onPlaySong();
         }
 
@@ -267,8 +283,10 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 case CreateNotification.ACTION_PLAY:
                     if (songService.isPlaying()) {
                         songService.pauseSong();
+                        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(songService.getCurrentPosition()), false);
                     } else {
                         songService.playSong();
+                        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(songService.getCurrentPosition()), true);
                     }
                     break;
                 case CreateNotification.ACTION_NEXT:
