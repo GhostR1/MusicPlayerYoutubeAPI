@@ -22,8 +22,7 @@
             android:background="@drawable/sv_style"
             android:layout_alignParentTop="true" />
 
-        <ImageButton
-            android:id="@+id/btn_search"
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/search"

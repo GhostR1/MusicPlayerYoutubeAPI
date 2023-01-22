@@ -6,8 +6,15 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
@@ -21,17 +28,16 @@ import java.util.List;
 import nataliia.semenova.musicplayeryoutubeapi.data.PermissionHelper;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.ISongList;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
+import nataliia.semenova.musicplayeryoutubeapi.service.NotificationServiceConnection;
 import nataliia.semenova.musicplayeryoutubeapi.service.SongService;
 import nataliia.semenova.musicplayeryoutubeapi.ui.fragment.DeviceFragment;
 import nataliia.semenova.musicplayeryoutubeapi.R;
 import nataliia.semenova.musicplayeryoutubeapi.ui.fragment.YoutubeFragment;
 import nataliia.semenova.musicplayeryoutubeapi.databinding.ActivityMainBinding;
+import nataliia.semenova.musicplayeryoutubeapi.utils.CreateNotification;
 
 
 public class MusicPlayerActivity extends AppCompatActivity implements View.OnClickListener, ISongList {
-    private static final int PHONE_PERMISSION_CODE = 100;
-    private final PhoneListener phoneListener = new PhoneListener();
-
     private ActivityMainBinding binding;
 
     private boolean isDisplayProgress = true;
@@ -39,6 +45,8 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     private final PlayerCallback callback = new PlayerCallback();
 
     private List<Song> songs;
+
+    NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,10 +93,6 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         binding.navBottomPlayer.btnPlayMp.setOnClickListener(this);
         binding.navBottomPlayer.btnNextMp.setOnClickListener(this);
 
-        PermissionHelper.checkPermission(Manifest.permission.READ_PHONE_STATE,
-                PHONE_PERMISSION_CODE, MusicPlayerActivity.this);
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
-        telephonyManager.listen(phoneListener, PhoneStateListener.LISTEN_CALL_STATE);
 
         if(songs == null) {
             binding.navBottomPlayer.getRoot().setVisibility(View.GONE);
@@ -111,12 +115,19 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         binding.navBottomPlayer.tvSongArtistMp.setHorizontallyScrolling(true);
         songService.setMusic(songs);
         songService.beginSong(position);
+        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         SongService.start(this, songConnection);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            createNotificationChannel();
+            registerReceiver(broadcastReceiver, new IntentFilter("TRACKS_TRACKS"));
+            startService(new Intent(getBaseContext(), NotificationServiceConnection.class));
+            notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        }
     }
 
     @Override
@@ -136,6 +147,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 if (position < 0) {
                     position = songs.size() - 1;
                 }
+                CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position));
                 songService.beginSong(position);
                 break;
             case (R.id.btn_play_mp):
@@ -180,6 +192,7 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         if (position >= songs.size()) {
             position = 0;
         }
+        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position));
         songService.beginSong(position);
     }
 
@@ -225,28 +238,43 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public class PhoneListener extends PhoneStateListener {
-        private boolean isPause;
-
-        @Override
-        public void onCallStateChanged(int state, String incomingNumber) {
-            super.onCallStateChanged(state, incomingNumber);
-            switch (state) {
-                case TelephonyManager.CALL_STATE_RINGING:
-                    if (songService.isPlaying()) {
-                        songService.pauseSong();
-                        isPause = true;
-                    }
-                    break;
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                    break;
-                case TelephonyManager.CALL_STATE_IDLE:
-                    if (songService != null && isPause) {
-                        songService.playSong();
-                        isPause = false;
-                    }
-                    break;
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel channel = new NotificationChannel("666",
+                    "666", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("description");
+            notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null){
+                notificationManager.createNotificationChannel(channel);
             }
         }
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getExtras().getString("actionname");
+
+            switch (action){
+                case CreateNotification.ACTION_PREVIOUS:
+                    int position;
+                    position = songService.getCurrentPosition() - 1;
+                    if (position < 0) {
+                        position = songs.size() - 1;
+                    }
+                    songService.beginSong(position);
+                    break;
+                case CreateNotification.ACTION_PLAY:
+                    if (songService.isPlaying()) {
+                        songService.pauseSong();
+                    } else {
+                        songService.playSong();
+                    }
+                    break;
+                case CreateNotification.ACTION_NEXT:
+                    playNext();
+                    break;
+            }
+        }
+    };
 }

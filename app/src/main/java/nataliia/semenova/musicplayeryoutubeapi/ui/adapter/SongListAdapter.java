@@ -1,6 +1,8 @@
 package nataliia.semenova.musicplayeryoutubeapi.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +43,7 @@ public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHo
         holder.tvTitle.setText(song.getTitle());
         holder.tvArtist.setText(song.getArtist());
         Glide.with(inflater.getContext())
-                .load(songs.get(position)
-                .getCoverUri())
+                .load(song.getCoverUri())
                 .apply(RequestOptions.placeholderOf(R.drawable.song_cover).centerInside())
                 .into(holder.ivCover);
 

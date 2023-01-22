@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     // Custom colors
+    <color name="transparent">#00000000</color>
     <color name="tint_color">#7765E3</color>
 
     <color name="dark_nav_bottom">#181A20</color>
@@ -17,7 +18,11 @@
     <color name="song_title">#9B9B9B</color>
     <color name="song_title_mini_player">#EAF0FF</color>
 
+    <color name="song_artist_youtube">#B2A5C0FF</color>
     <color name="song_artist">#5C5C5E</color>
     <color name="song_artist_mini_player">#B2A5C0FF</color>
+
     <color name="line_between_songs">#323232</color>
+    <color name="search_panel">#337C8EBB</color>
+
 </resources>

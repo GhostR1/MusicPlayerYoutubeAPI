@@ -31,6 +31,8 @@
                 android:value="" />
         </activity>
         <service android:name=".service.SongService" />
+        <receiver android:name=".service.NotificationService"/>
+        <service android:name=".service.NotificationServiceConnection"/>
     </application>
 
 </manifest>

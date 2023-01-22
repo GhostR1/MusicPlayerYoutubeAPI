@@ -2,7 +2,8 @@
     <string name="app_name">MusicPlayerYoutubeAPI</string>
     <string name="music">Музика</string>
     <string name="files">Файли</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="unknown">Unknown</string>
+    <string name="top_10_playlist">Топ-10 Imagine Dragons</string>
+    <string name="api_key">AIzaSyBfHhqRqWmO5ziLfvApg2FM8ScCpQwSiCM</string>
 </resources>
