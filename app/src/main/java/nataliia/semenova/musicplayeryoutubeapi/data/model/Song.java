@@ -1,8 +1,10 @@
 package nataliia.semenova.musicplayeryoutubeapi.data.model;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-public class Song {
+public class Song implements Parcelable {
     private long song_id;
     private String title;
     private String artist;
@@ -14,6 +16,25 @@ public class Song {
         this.artist = artist;
         this.coverUri = coverUri;
     }
+
+    protected Song(Parcel in) {
+        song_id = in.readLong();
+        title = in.readString();
+        artist = in.readString();
+        coverUri = in.readParcelable(Uri.class.getClassLoader());
+    }
+
+    public static final Creator<Song> CREATOR = new Creator<Song>() {
+        @Override
+        public Song createFromParcel(Parcel in) {
+            return new Song(in);
+        }
+
+        @Override
+        public Song[] newArray(int size) {
+            return new Song[size];
+        }
+    };
 
     public long getId() {
             return song_id;
@@ -45,5 +66,18 @@ public class Song {
 
     public void setCoverUri(Uri coverUri) {
         this.coverUri = coverUri;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(song_id);
+        parcel.writeString(title);
+        parcel.writeString(artist);
+        parcel.writeParcelable(coverUri, i);
     }
 }

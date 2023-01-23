@@ -1,9 +1,8 @@
 package nataliia.semenova.musicplayeryoutubeapi.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,28 +15,37 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.SeekBar;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nataliia.semenova.musicplayeryoutubeapi.data.model.ISongList;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.youtube.IYoutubeVideo;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.youtube.YoutubeVideo;
+import nataliia.semenova.musicplayeryoutubeapi.databinding.FragmentPlayerBinding;
 import nataliia.semenova.musicplayeryoutubeapi.service.NotificationServiceConnection;
 import nataliia.semenova.musicplayeryoutubeapi.service.SongService;
 import nataliia.semenova.musicplayeryoutubeapi.ui.fragment.DeviceFragment;
 import nataliia.semenova.musicplayeryoutubeapi.R;
+import nataliia.semenova.musicplayeryoutubeapi.ui.fragment.PlayerFragment;
 import nataliia.semenova.musicplayeryoutubeapi.ui.fragment.YoutubeFragment;
 import nataliia.semenova.musicplayeryoutubeapi.databinding.ActivityMainBinding;
 import nataliia.semenova.musicplayeryoutubeapi.utils.CreateNotification;
 
 
-public class MusicPlayerActivity extends AppCompatActivity implements View.OnClickListener, ISongList {
+public class MusicPlayerActivity extends AppCompatActivity implements View.OnClickListener, ISongList, IYoutubeVideo, SeekBar.OnSeekBarChangeListener {
     private ActivityMainBinding binding;
+    private FragmentPlayerBinding playerBinding = null;
 
     private boolean isDisplayProgress = true;
     private SongService songService;
@@ -45,14 +53,14 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
 
     private List<Song> songs;
 
-    NotificationManager notificationManager;
+    private NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new YoutubeFragment());
+        replaceFragment(new YoutubeFragment(), false);
 
         bindNavBottomActions();
 
@@ -61,8 +69,19 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+    public void replaceFragment(Fragment fragment, boolean isPlayerFragment) {
+        playerBinding = null;
+        if(isPlayerFragment) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("songs", (ArrayList<? extends Parcelable>) songs);
+            bundle.putInt("position", songService.getCurrentPosition());
+            fragment.setArguments(bundle);
+        } else {
+            if (songs != null) {
+                binding.navBottomPlayer.getRoot().setVisibility(View.VISIBLE);
+            }
+        }
+        FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(binding.frameLayout.getId(), fragment).commit();
     }
@@ -71,40 +90,23 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         binding.navBottomMenu.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case (R.id.music):
-                    replaceFragment(new YoutubeFragment());
+                    playerBinding = null;
+                    replaceFragment(new YoutubeFragment(), false);
                     break;
                 case (R.id.files):
-                    replaceFragment(new DeviceFragment());
+                    playerBinding = null;
+                    replaceFragment(new DeviceFragment(), false);
                     break;
             }
             return true;
         });
 
-        binding.navBottomPlayer.sbSongMp
-                .setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                        isDisplayProgress = false;
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        isDisplayProgress = true;
-                        int pos = songService.getCurrentPosition();
-                        if (pos < 0) {
-                            seekBar.setProgress(0);
-                            return;
-                        }
-                        songService.setSongProgress(seekBar.getProgress());
-                    }
-                });
+        binding.navBottomPlayer.sbSongMp.setOnSeekBarChangeListener(this);
 
         binding.navBottomPlayer.btnPreviousMp.setOnClickListener(this);
         binding.navBottomPlayer.btnPlayMp.setOnClickListener(this);
         binding.navBottomPlayer.btnNextMp.setOnClickListener(this);
+        binding.navBottomPlayer.ivSongCoverMp.setOnClickListener(this);
     }
 
     @Override
@@ -119,6 +121,38 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         songService.beginSong(position);
         CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(position), true);
     }
+
+    @Override
+    public void fragmentPlayerNext() {
+        playNext();
+    }
+
+    @Override
+    public void fragmentPlayerPause() {
+        pausePlay();
+    }
+
+    @Override
+    public void fragmentPlayerPrevious() {
+        playPrevious();
+    }
+
+    @Override
+    public void fragmentPlayerBinding(FragmentPlayerBinding fragmentPlayerBinding) {
+        playerBinding = fragmentPlayerBinding;
+        binding.navBottomPlayer.getRoot().setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void fragmentPlayerDisplayProgress(boolean displayProgress) {
+        isDisplayProgress = displayProgress;
+    }
+
+    @Override
+    public void fragmentPlayerSetProgress(int progress) {
+        songService.setSongProgress(progress);
+    }
+
 
     @Override
     protected void onStart() {
@@ -151,6 +185,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 break;
             case (R.id.btn_next_mp):
                 playNext();
+                break;
+            case (R.id.iv_song_cover_mp):
+                replaceFragment(new PlayerFragment(), true);
                 break;
         }
     }
@@ -198,6 +235,9 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
                 if (currentPosition != -1) {
                     callback.onBeginSong(currentPosition);
                     songService.callProgressChange();
+                    if(playerBinding != null) {
+                        playerBinding.btnPlay.setActivated(songService.isPlaying());
+                    }
                     binding.navBottomPlayer.btnPlayMp.setActivated(songService.isPlaying());
                 }
             }
@@ -208,18 +248,74 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
         }
     };
 
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        isDisplayProgress = false;
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        isDisplayProgress = true;
+        int pos = songService.getCurrentPosition();
+        if (pos < 0) {
+            seekBar.setProgress(0);
+            return;
+        }
+        songService.setSongProgress(seekBar.getProgress());
+    }
+
+    @Override
+    public void startVideo(YoutubeVideo video) {
+        playerBinding = null;
+        songService.pauseSong();
+        Intent intent = new Intent(MusicPlayerActivity.this, YoutubePlayerActivity.class);
+        intent.putExtra("video", video);
+        startActivity(intent);
+    }
+
+
     class PlayerCallback implements SongService.ICallback {
 
         @Override
         public void onBeginSong(int position) {
-            binding.navBottomPlayer.tvSongTitleMp
-                    .setText(songs.get(position).getTitle());
-            binding.navBottomPlayer.tvSongArtistMp
-                    .setText(songs.get(position).getArtist());
+            Song song = songs.get(position);
+            binding.navBottomPlayer.tvSongTitleMp.setText(song.getTitle());
+            binding.navBottomPlayer.tvSongArtistMp.setText(song.getArtist());
             Glide.with(MusicPlayerActivity.this)
-                    .load(songs.get(position).getCoverUri())
+                    .load(song.getCoverUri())
                     .apply(RequestOptions.placeholderOf(R.drawable.song_cover))
                     .into(binding.navBottomPlayer.ivSongCoverMp);
+            if(playerBinding != null) {
+                playerBinding.tvSongTitle.setText(song.getTitle());
+                playerBinding.tvSongArtist.setText(song.getArtist());
+                Glide.with(MusicPlayerActivity.this)
+                        .load(song.getCoverUri())
+                        .apply(RequestOptions.placeholderOf(R.drawable.song_cover))
+                        .into(playerBinding.ivSongCover);
+                playerBinding.sbSong.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) { }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        isDisplayProgress = false;
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        isDisplayProgress = true;
+                        int pos = songService.getCurrentPosition();
+                        if (pos < 0) {
+                            seekBar.setProgress(0);
+                            return;
+                        }
+                        songService.setSongProgress(seekBar.getProgress());
+                    }
+                });
+            }
             onPlaySong();
         }
 
@@ -230,21 +326,38 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
             if (isDisplayProgress) {
                 seekBar.setProgress(progress);
             }
+            if(playerBinding != null) {
+                seekBar = playerBinding.sbSong;
+                seekBar.setMax(maxProgress);
+                if (isDisplayProgress) {
+                    seekBar.setProgress(progress);
+                }
+            }
         }
 
         @Override
         public void onDurationChange(int duration) {
             binding.navBottomPlayer.sbSongMp.setMax(duration);
+            if(playerBinding != null) {
+                playerBinding.sbSong.setMax(duration);
+            }
         }
 
         @Override
         public void onPlaySong() {
             binding.navBottomPlayer.btnPlayMp.setActivated(true);
+            if(playerBinding != null) {
+                playerBinding.btnPlay.setActivated(true);
+            }
         }
 
         @Override
         public void onPauseSong() {
-            binding.navBottomPlayer.btnPlayMp.setActivated(false);
+
+                binding.navBottomPlayer.btnPlayMp.setActivated(false);
+            if(playerBinding != null) {
+                playerBinding.btnPlay.setActivated(false);
+            }
         }
 
         @Override
@@ -269,25 +382,14 @@ public class MusicPlayerActivity extends AppCompatActivity implements View.OnCli
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getExtras().getString("actionname");
+            String action = intent.getExtras().getString("action");
 
             switch (action){
                 case CreateNotification.ACTION_PREVIOUS:
-                    int position;
-                    position = songService.getCurrentPosition() - 1;
-                    if (position < 0) {
-                        position = songs.size() - 1;
-                    }
-                    songService.beginSong(position);
+                    playPrevious();
                     break;
                 case CreateNotification.ACTION_PLAY:
-                    if (songService.isPlaying()) {
-                        songService.pauseSong();
-                        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(songService.getCurrentPosition()), false);
-                    } else {
-                        songService.playSong();
-                        CreateNotification.createNotification(MusicPlayerActivity.this, songs.get(songService.getCurrentPosition()), true);
-                    }
+                    pausePlay();
                     break;
                 case CreateNotification.ACTION_NEXT:
                     playNext();

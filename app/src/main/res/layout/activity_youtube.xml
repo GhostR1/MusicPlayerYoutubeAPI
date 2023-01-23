@@ -1,0 +1,39 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/dark_music_player"
+    tools:context=".ui.YoutubePlayerActivity">
+    <com.google.android.youtube.player.YouTubePlayerView
+        android:id="@+id/youtube_player"
+        android:layout_height="300dp"
+        android:layout_width="match_parent"/>
+
+    <TextView
+        android:id="@+id/tv_title_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/youtube_player"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:maxLines="1"
+        android:text="@string/unknown"
+        android:textColor="@color/song_title"
+        android:textSize="22sp" />
+    <TextView
+        android:id="@+id/tv_title_artist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_title_video"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:maxLines="1"
+        android:text="@string/unknown"
+        android:textColor="@color/song_artist_youtube"
+        android:textSize="16sp" />
+</RelativeLayout>

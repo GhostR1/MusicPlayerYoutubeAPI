@@ -5,5 +5,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="unknown">Unknown</string>
     <string name="top_10_playlist">Топ-10 Imagine Dragons</string>
-    <string name="error_happened">Error has occured!</string>
+    <string name="error_happened">Token has been expired!!!</string>
+    <string name="top_100_playlist">Топ-100 Imagine Dragons</string>
+    <string name="playing_now">Playing now</string>
 </resources>

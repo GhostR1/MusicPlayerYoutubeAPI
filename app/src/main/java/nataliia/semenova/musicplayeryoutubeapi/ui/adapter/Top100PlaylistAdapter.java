@@ -18,13 +18,13 @@ import java.util.List;
 import nataliia.semenova.musicplayeryoutubeapi.R;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.youtube.YoutubeVideo;
 
-public class Top10PlaylistAdapter extends RecyclerView.Adapter<Top10PlaylistAdapter.ViewHolder> {
+public class Top100PlaylistAdapter extends RecyclerView.Adapter<Top100PlaylistAdapter.ViewHolder> {
     private final LayoutInflater inflater;
     public List<YoutubeVideo> songs;
 
     private final Callback callback;
 
-    public Top10PlaylistAdapter(Context context, List<YoutubeVideo> songs, Callback callback) {
+    public Top100PlaylistAdapter(Context context, List<YoutubeVideo> songs, Callback callback) {
         this.songs = songs;
         this.inflater = LayoutInflater.from(context);
         this.callback = callback;
@@ -32,13 +32,13 @@ public class Top10PlaylistAdapter extends RecyclerView.Adapter<Top10PlaylistAdap
 
     @NonNull
     @Override
-    public Top10PlaylistAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.item_top_10_playlist, parent, false);
+    public Top100PlaylistAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = inflater.inflate(R.layout.item_top_100_playlist, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(Top10PlaylistAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(Top100PlaylistAdapter.ViewHolder holder, int position) {
         YoutubeVideo youtubeVideo = songs.get(position);
 
         holder.tvTitle.setText(youtubeVideo.getSnippet().getTitle());
@@ -68,9 +68,9 @@ public class Top10PlaylistAdapter extends RecyclerView.Adapter<Top10PlaylistAdap
 
         ViewHolder(View view) {
             super(view);
-            tvTitle = view.findViewById(R.id.tv_song_title_top_10);
-            tvArtist = view.findViewById(R.id.tv_song_artist_top_10);
-            ivCover = view.findViewById(R.id.iv_song_cover_top_10);
+            tvTitle = view.findViewById(R.id.tv_song_title_top_100);
+            tvArtist = view.findViewById(R.id.tv_song_artist_top_100);
+            ivCover = view.findViewById(R.id.iv_song_cover_top_100);
         }
     }
 

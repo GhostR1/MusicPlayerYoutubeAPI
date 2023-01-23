@@ -32,7 +32,8 @@
                     android:paddingVertical="5dp"
                     android:paddingHorizontal="10dp"
                     android:textSize="21sp"
-                    android:maxLines="1"/>
+                    android:maxLines="1"
+                    android:inputType="text"/>
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -45,24 +46,44 @@
                     android:src="@drawable/search"
                     android:scaleType="centerInside"/>
             </RelativeLayout>
-                <TextView
-                    android:id="@+id/tv_top_10_playlist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="21sp"
-                    android:textStyle="bold"
-                    android:layout_below="@id/layout_search"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginStart="20dp"
-                    android:text="@string/top_10_playlist"/>
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_top_10_playlist"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_top_10_playlist"
-                    android:layout_below="@id/tv_top_10_playlist"/>
+            <TextView
+                android:id="@+id/tv_top_10_playlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:layout_below="@id/layout_search"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/top_10_playlist"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_top_10_playlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_top_10_playlist"
+                android:layout_below="@id/tv_top_10_playlist"/>
+            <TextView
+                android:id="@+id/tv_top_100_playlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="21sp"
+                android:textStyle="bold"
+                android:layout_below="@id/rv_top_10_playlist"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:text="@string/top_100_playlist"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_top_100_playlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_top_100_playlist"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="3"
+                tools:listitem="@layout/item_top_100_playlist" />
         </RelativeLayout>
     </ScrollView>
 </FrameLayout>

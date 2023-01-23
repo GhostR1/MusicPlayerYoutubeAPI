@@ -160,9 +160,11 @@ public class SongService extends Service {
 
         @Override
         public void onCompletion(MediaPlayer mediaPlayer) {
-            mediaPlayer.getTrackInfo();
-            callback.onFinishSong();
-            handlerProgress.removeCallbacks(updateProgressTask);
+            if(songs != null) {
+                mediaPlayer.getTrackInfo();
+                callback.onFinishSong();
+                handlerProgress.removeCallbacks(updateProgressTask);
+            }
         }
 
         @Override

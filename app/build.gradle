@@ -19,7 +19,7 @@ android {
     buildTypes {
         debug {
             buildConfigField "String", "API_YOUTUBE_URL", "\"https://www.googleapis.com/youtube/v3/\""
-            buildConfigField "String", "YOTUBE_DATA_TOKEN", "\"AIzaSyBfHhqRqWmO5ziLfvApg2FM8ScCpQwSiCM\""
+            buildConfigField "String", "YOTUBE_DATA_TOKEN", "\"AIzaSyA5nIDiBD0xw4C66DIfZl20Y7durWfS370\""
         }
         release {
             buildConfigField "String", "API_YOUTUBE_URL", "\"https://www.googleapis.com/youtube/v3/\""
@@ -42,6 +42,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation files('libs\\YouTubeAndroidPlayerApi.jar')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
