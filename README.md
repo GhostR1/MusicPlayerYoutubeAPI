@@ -42,7 +42,7 @@ Download:
    ```
 Import Project by Android Studio Menu > File > Import Project...
 
-Run ExamGame by Android Studio Menu > Run > Run MusicPlayerYoutubeAPI.
+Run MusicPlayerYoutubeAPI by Android Studio Menu > Run > Run MusicPlayerYoutubeAPI.
 If some issues are happened, try "Sync Project with Gradle Files" or "Rebuild Project" at Android Studio Menu
 
 
