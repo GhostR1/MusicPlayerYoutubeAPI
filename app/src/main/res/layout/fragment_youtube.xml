@@ -36,14 +36,14 @@
                     android:inputType="text"/>
 
                 <ImageView
+                    android:id="@+id/btn_voice_recognition"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/sv_youtube_songs"
                     android:layout_alignBottom="@id/sv_youtube_songs"
                     android:layout_alignEnd="@id/sv_youtube_songs"
                     android:background="@color/transparent"
-                    android:layout_margin="10dp"
-                    android:src="@drawable/search"
+                    android:src="@drawable/ic_baseline_keyboard_voice_24"
                     android:scaleType="centerInside"/>
             </RelativeLayout>
             <TextView

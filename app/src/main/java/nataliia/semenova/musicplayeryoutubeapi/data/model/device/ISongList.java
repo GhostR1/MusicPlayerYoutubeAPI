@@ -1,4 +1,4 @@
-package nataliia.semenova.musicplayeryoutubeapi.data.model;
+package nataliia.semenova.musicplayeryoutubeapi.data.model.device;
 
 import java.util.List;
 

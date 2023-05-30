@@ -38,9 +38,10 @@
                 android:value="" />
         </activity>
         <activity android:name=".ui.YoutubePlayerActivity"/>
-        <service android:name=".service.SongService" />
 
+        <service android:name=".service.SongService" />
         <service android:name=".service.NotificationServiceConnection"/>
+
         <receiver android:name=".service.NotificationService"/>
     </application>
 

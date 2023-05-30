@@ -5,7 +5,8 @@
         android:icon="@drawable/music"
         android:iconTint="@color/tint_color"
         android:id="@+id/music"
-        tools:targetApi="o" />
+        tools:targetApi="o"
+        android:checked="false"/>
     <item android:title=""
         android:enabled="false"/>
     <item android:title=""
@@ -14,5 +15,6 @@
         android:icon="@drawable/files"
         android:iconTint="@color/tint_color"
         android:id="@+id/files"
-        tools:targetApi="o" />
+        tools:targetApi="o"
+        android:checked="true"/>
 </menu>

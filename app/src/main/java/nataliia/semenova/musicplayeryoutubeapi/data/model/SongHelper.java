@@ -1,4 +1,4 @@
-package nataliia.semenova.musicplayeryoutubeapi.data;
+package nataliia.semenova.musicplayeryoutubeapi.data.model;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;
@@ -7,12 +7,10 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
-
-import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.device.Song;
 
 public class SongHelper {
     final private static Uri ALBUM_URI = Uri.parse("content://media/external/audio/albumart");

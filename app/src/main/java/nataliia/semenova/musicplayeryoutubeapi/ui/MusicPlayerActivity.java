@@ -28,8 +28,8 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import nataliia.semenova.musicplayeryoutubeapi.data.model.ISongList;
-import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.device.ISongList;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.device.Song;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.youtube.IYoutubeVideo;
 import nataliia.semenova.musicplayeryoutubeapi.data.model.youtube.YoutubeVideo;
 import nataliia.semenova.musicplayeryoutubeapi.databinding.FragmentPlayerBinding;

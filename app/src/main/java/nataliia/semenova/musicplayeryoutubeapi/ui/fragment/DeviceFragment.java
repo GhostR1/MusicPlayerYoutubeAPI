@@ -22,9 +22,9 @@ import java.util.List;
 
 import nataliia.semenova.musicplayeryoutubeapi.R;
 import nataliia.semenova.musicplayeryoutubeapi.utils.PermissionHelper;
-import nataliia.semenova.musicplayeryoutubeapi.data.SongHelper;
-import nataliia.semenova.musicplayeryoutubeapi.data.model.ISongList;
-import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.SongHelper;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.device.ISongList;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.device.Song;
 import nataliia.semenova.musicplayeryoutubeapi.ui.MusicPlayerActivity;
 import nataliia.semenova.musicplayeryoutubeapi.ui.adapter.SongListAdapter;
 

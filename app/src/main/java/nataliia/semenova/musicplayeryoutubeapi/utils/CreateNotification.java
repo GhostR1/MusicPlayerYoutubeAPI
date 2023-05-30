@@ -14,11 +14,8 @@ import android.widget.ImageView;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import nataliia.semenova.musicplayeryoutubeapi.R;
-import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.device.Song;
 import nataliia.semenova.musicplayeryoutubeapi.service.NotificationService;
 
 public class CreateNotification {
@@ -30,7 +27,7 @@ public class CreateNotification {
     public static Notification notification;
 
     public static void createNotification(Context context, Song song, boolean isPlaying) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
             NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
             MediaSessionCompat mediaSessionCompat = new MediaSessionCompat( context, "tag");

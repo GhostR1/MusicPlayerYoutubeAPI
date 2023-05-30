@@ -8,32 +8,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import android.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 
 import nataliia.semenova.musicplayeryoutubeapi.R;
 
-import nataliia.semenova.musicplayeryoutubeapi.data.model.ISongList;
-import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.device.ISongList;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.device.Song;
 
-import nataliia.semenova.musicplayeryoutubeapi.databinding.ActivityMainBinding;
 import nataliia.semenova.musicplayeryoutubeapi.databinding.FragmentPlayerBinding;
 import nataliia.semenova.musicplayeryoutubeapi.ui.MusicPlayerActivity;
-import nataliia.semenova.musicplayeryoutubeapi.ui.adapter.SongListAdapter;
 
 public class PlayerFragment extends Fragment implements View.OnClickListener {
     public FragmentPlayerBinding binding;

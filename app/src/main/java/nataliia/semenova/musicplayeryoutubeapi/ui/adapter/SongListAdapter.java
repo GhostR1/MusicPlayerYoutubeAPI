@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
 
 import nataliia.semenova.musicplayeryoutubeapi.R;
-import nataliia.semenova.musicplayeryoutubeapi.data.model.Song;
+import nataliia.semenova.musicplayeryoutubeapi.data.model.device.Song;
 
 public class SongListAdapter extends RecyclerView.Adapter<SongListAdapter.ViewHolder> {
     private final LayoutInflater inflater;

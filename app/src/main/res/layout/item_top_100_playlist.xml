@@ -5,7 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <ImageView
-        android:id="@+id/iv_song_cover_top_100"
+        android:id="@+id/iv_song_cover_top"
         android:layout_width="120dp"
         android:layout_height="80dp"
         android:layout_alignParentStart="true"
@@ -16,12 +16,12 @@
         android:src="@drawable/song_cover"/>
 
     <TextView
-        android:id="@+id/tv_song_title_top_100"
+        android:id="@+id/tv_song_title_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_song_cover_top_100"
-        android:layout_alignStart="@+id/iv_song_cover_top_100"
-        android:layout_alignEnd="@+id/iv_song_cover_top_100"
+        android:layout_below="@id/iv_song_cover_top"
+        android:layout_alignStart="@+id/iv_song_cover_top"
+        android:layout_alignEnd="@+id/iv_song_cover_top"
         android:gravity="center"
         android:maxLines="1"
         android:textColor="@color/song_title_mini_player"
@@ -29,12 +29,12 @@
         tools:text="@string/unknown" />
 
     <TextView
-        android:id="@+id/tv_song_artist_top_100"
+        android:id="@+id/tv_song_artist_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_song_title_top_100"
-        android:layout_alignStart="@+id/iv_song_cover_top_100"
-        android:layout_alignEnd="@+id/iv_song_cover_top_100"
+        android:layout_below="@+id/tv_song_title_top"
+        android:layout_alignStart="@+id/iv_song_cover_top"
+        android:layout_alignEnd="@+id/iv_song_cover_top"
         android:textColor="@color/song_artist_youtube"
         android:textStyle="bold"
         android:textAllCaps="true"

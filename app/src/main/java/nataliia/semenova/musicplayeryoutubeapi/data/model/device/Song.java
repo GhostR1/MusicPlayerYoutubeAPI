@@ -1,4 +1,4 @@
-package nataliia.semenova.musicplayeryoutubeapi.data.model;
+package nataliia.semenova.musicplayeryoutubeapi.data.model.device;
 
 import android.net.Uri;
 import android.os.Parcel;
